@@ -19,7 +19,13 @@ jobs:
       - run: python -m pytest -q tests
       - run: python tools/make_icon.py
       - run: python -m PyInstaller --noconfirm --clean --onefile --noconsole --name G29ShiftLight --icon assets/icon.ico run_tray.py
+      - name: SHA-256
+        run: |
+          $h = (Get-FileHash dist/G29ShiftLight.exe -Algorithm SHA256).Hash.ToLower()
+          "$h  G29ShiftLight.exe" | Out-File -Encoding ascii dist/G29ShiftLight.exe.sha256
       - uses: softprops/action-gh-release@v2
         with:
-          files: dist/G29ShiftLight.exe
+          files: |
+            dist/G29ShiftLight.exe
+            dist/G29ShiftLight.exe.sha256
           generate_release_notes: true

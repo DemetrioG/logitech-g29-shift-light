@@ -9,7 +9,7 @@ It reads the game's UDP telemetry ("Data Out") and lights the 5 LEDs as RPM clim
 
 1. **Download** [`G29ShiftLight.exe`](https://github.com/DemetrioG/logitech-g29-shift-light/releases/latest/download/G29ShiftLight.exe) and run it.
    A 5-LED icon appears in the system tray (near the clock; it may be under the `^` arrow). Gray = waiting for the game, colored = connected.
-   > Windows SmartScreen may warn about an unknown publisher (the app is not code-signed). Click **More info → Run anyway**.
+   Windows will show a SmartScreen warning the first time — see [SmartScreen warning](#smartscreen-warning) below.
 2. **Allow the game to send telemetry (once):** right-click the tray icon → **Configurar Windows para o Forza... / Configure Windows for Forza...** → accept the administrator prompt → restart the game.
 3. **In Forza:** Settings → HUD and Gameplay → **Data Out: ON**, **Data Out IP Address: `127.0.0.1`**, **Data Out IP Port: `5300`**.
 4. Drive. LEDs start lighting at ~70% of the RPM range and flash near the limit.
@@ -23,6 +23,20 @@ PowerShell **as administrator**:
     CheckNetIsolation LoopbackExempt -a -n="Microsoft.SunriseBaseGame_8wekyb3d8bbwe"
     New-NetFirewallRule -DisplayName "G29 Shift Light UDP" -Direction Inbound -Protocol UDP -LocalPort 5300 -Action Allow
 </details>
+
+## SmartScreen warning
+
+On first run Windows shows *"Windows protected your PC — Microsoft Defender SmartScreen prevented an unrecognized app from starting"*.
+This happens because the `.exe` is not code-signed and is new, so it has no download reputation yet. It does **not** mean a threat was detected.
+
+1. Click **More info**.
+2. Click **Run anyway**.
+
+Want to be sure the file is the one built from this source? The Release lists a `G29ShiftLight.exe.sha256` file. Compare it with:
+
+    Get-FileHash .\G29ShiftLight.exe -Algorithm SHA256
+
+You can also read the code and [build it yourself](#build-from-source-windows). The file is compiled by GitHub Actions from the public workflow, not on a personal machine.
 
 ## Troubleshooting
 
@@ -68,12 +82,26 @@ Lê a telemetria UDP do jogo ("Saída de dados") e acende os 5 LEDs conforme o R
 
 1. **Baixe** o [`G29ShiftLight.exe`](https://github.com/DemetrioG/logitech-g29-shift-light/releases/latest/download/G29ShiftLight.exe) e execute.
    Um ícone de 5 LEDs aparece na bandeja (perto do relógio, talvez dentro da seta `^`). Cinza = aguardando o jogo, colorido = conectado.
-   > O Windows SmartScreen pode avisar sobre editor desconhecido (o app não é assinado). Clique em **Mais informações → Executar assim mesmo**.
+   O Windows mostra um aviso do SmartScreen na primeira vez — veja [Aviso do SmartScreen](#aviso-do-smartscreen) abaixo.
 2. **Libere o envio de telemetria (uma vez):** botão direito no ícone → **Configurar Windows para o Forza...** → aceite o pedido de administrador → reinicie o jogo.
 3. **No Forza:** Configurações → HUD e Jogabilidade → **Saída de dados: SIM**, **Endereço IP: `127.0.0.1`**, **Porta: `5300`**.
 4. Dirija. Os LEDs acendem a partir de ~70% do range de RPM e piscam perto do limite.
 
 Menu da bandeja: status, *Iniciar com o Windows* e sair. O G HUB pode ficar aberto ou fechado.
+
+## Aviso do SmartScreen
+
+Na primeira execução aparece *"O Windows protegeu o computador — o Microsoft Defender SmartScreen impediu que um aplicativo não reconhecido fosse iniciado"*.
+Isso acontece porque o `.exe` não tem assinatura digital e é novo, então ainda não tem reputação de downloads. **Não** significa que uma ameaça foi detectada.
+
+1. Clique em **Mais informações**.
+2. Clique em **Executar assim mesmo**.
+
+Para conferir que o arquivo é o compilado a partir deste código, o Release traz o `G29ShiftLight.exe.sha256`. Compare com:
+
+    Get-FileHash .\G29ShiftLight.exe -Algorithm SHA256
+
+O arquivo é compilado pelo GitHub Actions a partir do workflow público, e não numa máquina pessoal. Você também pode ler o código e compilar você mesmo.
 
 ## Problemas comuns
 
